@@ -117,11 +117,11 @@ class parSpectral(object):
         preserveX = self.xn/3;
         truncateX = self.xn/2 - preserveX;
 
-        filterX = zeros((1, self.xn/2+1));
+        filterX = zeros(( self.xn/2+1,1));
         filterX[0, 0:preserveX] = 1.;
 
         i = arange(preserveX, self.xn/2);
-        filterX[0, i] = exp((preserveX-i)/3.);
+        filterX[i,0] = exp((preserveX-i)/3.);
 
         self.filterX = filterX;
 
@@ -138,15 +138,15 @@ class parSpectral(object):
         self.filterY = filterY;
 
 
-    def partialX(field, order=1):
+    def partialX(self,field, order=1):
 
         self.fwdxTrans(field);
         
-        temp = self.interArr;
+        temp = self.interxArr;
 
-        temp *= self.filterX;
+        #~ temp *= self.filterX;
 
-        multiplier = self.kx**order;
+        multiplier = (self.kx*1j)**order;
 
         temp *= multiplier;
 
