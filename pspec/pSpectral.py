@@ -11,23 +11,23 @@ class parSpectral(object):
                 xType='Fourier', yType='Fourier'):
 
         self.inpArr = pyfftw.n_byte_align_empty(\
-                (numPointsX, numPointsY),\
+                (numPointsY, numPointsX),\
                 pyfftw.simd_alignment,
                 dtype='float64');
 
         self.interxArr = pyfftw.n_byte_align_empty(\
-                (numPointsX/2 + 1, numPointsY),\
+                (numPointsY,numPointsX/2 + 1),\
                 pyfftw.simd_alignment,
                 dtype='complex128');
 
         self.interyArr = pyfftw.n_byte_align_empty(\
-                (numPointsX, numPointsY/2 + 1),\
+                (numPointsY/2 + 1 , numPointsX),\
                 pyfftw.simd_alignment,
                 dtype='complex128');
 
 
         self.outArr = pyfftw.n_byte_align_empty(\
-                (numPointsX, numPointsY),\
+                (numPointsY, numPointsX),\
                 pyfftw.simd_alignment,
                 dtype='float64');
 
@@ -79,21 +79,21 @@ class parSpectral(object):
 
 
             self.fwdxTrans = pyfftw.FFTW(\
-                self.inpArr, self.interxArr, axes=[0,],\
+                self.inpArr, self.interxArr, axes=[1,],\
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
             self.invxTrans = pyfftw.FFTW(\
-                self.interxArr, self.outArr, axes=[0,],\
+                self.interxArr, self.outArr, axes=[1,],\
                 direction='FFTW_BACKWARD',
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
 
             self.fwdyTrans = pyfftw.FFTW(\
-                self.inpArr, self.interyArr, axes=[1,],\
+                self.inpArr, self.interyArr, axes=[0,],\
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
             self.invyTrans = pyfftw.FFTW(\
-                self.interyArr, self.outArr, axes=[1,],\
+                self.interyArr, self.outArr, axes=[0,],\
                 direction='FFTW_BACKWARD',
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
@@ -109,8 +109,8 @@ class parSpectral(object):
 
 
         #Prepare the wavenumber arrays
-        self.kx = 2*pi*1j*(arange(numPointsX/2)+1)/length;
-        self.ky = 2*pi*1j*(arange(numPointsY/2)+1)/length;
+        self.kx = 2*pi*1j*(arange(numPointsX/2+1))/length;
+        self.ky = 2*pi*1j*(arange(numPointsY/2+1))/length;
 
         #Prepare the filters
 
