@@ -9,8 +9,8 @@ ky = linspace(0,2*pi-2*pi/512,512)
 [x,y]=  meshgrid(kx,ky)
 
 b = sin(x)*cos(y)
-bpx = a.partialX(b)
+out = a.partialX(b)	
 
 d = cos(x)*cos(y)
-imshow(bpx)
-
+imshow(out)
+show()

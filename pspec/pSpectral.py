@@ -4,6 +4,7 @@ import pickle
 import multiprocessing
 from numpy import arange, pi, zeros, exp
 from numpy.fft.helper import ifftshift
+from numpy.fft import rfft, ifft, fft2,ifft2
 
 class parSpectral(object):
 
@@ -141,12 +142,13 @@ class parSpectral(object):
     def partialX(self,field, order=1):
 
         self.fwdxTrans(field);
-        
         temp = self.interxArr;
 
         #~ temp *= self.filterX;
+        
+       
 
-        multiplier = (self.kx*1j)**order;
+        multiplier = (self.kx)**order;
 
         temp *= multiplier;
 
