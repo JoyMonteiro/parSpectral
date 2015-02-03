@@ -155,4 +155,7 @@ class parSpectral(object):
         self.invxTrans();
 
         return self.outArr.real.copy();
+        
+
+
 
