@@ -173,15 +173,15 @@ class parSpectral(object):
 
        return( [self.partialX(field), self.partialY(field)]);
 
-   def divergence(self, u, v):
+    def divergence(self, u, v):
 
        return(self.partialX(u) + self.partialY(v));
 
-   def curl(self, u, v):
+    def curl(self, u, v):
 
        return(self.partialX(v) - self.partialY(u));
 
-   def laplacian(self, field):
+    def laplacian(self, field):
 
        return(self.partialX(field, 2) + self.partialY(field, 2));
 
