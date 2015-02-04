@@ -1,10 +1,11 @@
-import pyfftw
-import os.path
-import pickle
-import multiprocessing
-from numpy import arange, pi, zeros, exp
-from numpy.fft.helper import ifftshift
-from numpy.fft import rfft, ifft, fft2,ifft2
+import pyfftw;
+import os.path;
+import pickle;
+import multiprocessing;
+import numpy as np;
+from numpy import arange, pi, zeros, exp;
+from numpy.fft.helper import ifftshift;
+from numpy.fft import rfft, ifft, fft2,ifft2;
 
 class parSpectral(object):
 
@@ -12,23 +13,23 @@ class parSpectral(object):
                 xType='Fourier', yType='Fourier'):
 
         self.inpArr = pyfftw.n_byte_align_empty(\
-                (numPointsY, numPointsX),\
+                (numPointsX, numPointsY),\
                 pyfftw.simd_alignment,
                 dtype='float64');
 
         self.interxArr = pyfftw.n_byte_align_empty(\
-                (numPointsY,numPointsX/2 + 1),\
+                (numPointsX/2 + 1,numPointsY),\
                 pyfftw.simd_alignment,
                 dtype='complex128');
 
         self.interyArr = pyfftw.n_byte_align_empty(\
-                (numPointsY/2 + 1 , numPointsX),\
+                (numPointsX, numPointsY/2 + 1),\
                 pyfftw.simd_alignment,
                 dtype='complex128');
 
 
         self.outArr = pyfftw.n_byte_align_empty(\
-                (numPointsY, numPointsX),\
+                (numPointsX, numPointsY),\
                 pyfftw.simd_alignment,
                 dtype='float64');
 
@@ -80,21 +81,21 @@ class parSpectral(object):
 
 
             self.fwdxTrans = pyfftw.FFTW(\
-                self.inpArr, self.interxArr, axes=[1,],\
+                self.inpArr, self.interxArr, axes=[0,],\
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
             self.invxTrans = pyfftw.FFTW(\
-                self.interxArr, self.outArr, axes=[1,],\
+                self.interxArr, self.outArr, axes=[0,],\
                 direction='FFTW_BACKWARD',
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
 
             self.fwdyTrans = pyfftw.FFTW(\
-                self.inpArr, self.interyArr, axes=[0,],\
+                self.inpArr, self.interyArr, axes=[1,],\
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
             self.invyTrans = pyfftw.FFTW(\
-                self.interyArr, self.outArr, axes=[0,],\
+                self.interyArr, self.outArr, axes=[1,],\
                 direction='FFTW_BACKWARD',
                 flags=['FFTW_PATIENT',],threads=self.numCpus);
 
@@ -118,11 +119,11 @@ class parSpectral(object):
         preserveX = self.xn/3;
         truncateX = self.xn/2 - preserveX;
 
-        filterX = zeros(( self.xn/2+1,1));
-        filterX[0, 0:preserveX] = 1.;
+        filterX = zeros((self.xn/2+1, 1));
+        filterX[0:preserveX, 0] = 1.;
 
         i = arange(preserveX, self.xn/2);
-        filterX[i,0] = exp((preserveX-i)/3.);
+        filterX[i, 0] = exp((preserveX-i)/3.);
 
         self.filterX = filterX;
 
@@ -130,8 +131,8 @@ class parSpectral(object):
         preserveY = self.yn/3;
         truncateY = self.yn/2 - preserveY;
 
-        filterY = zeros((1, self.yn));
-        filterY[0, -preserveY::] = 1.;
+        filterY = zeros((1, self.yn/2+1));
+        filterY[0, 0:preserveY] = 1.;
 
         i = arange(preserveY, self.yn/2);
         filterY[0, i] = exp((preserveY-i)/3.);
@@ -144,18 +145,46 @@ class parSpectral(object):
         self.fwdxTrans(field);
         temp = self.interxArr;
 
-        #~ temp *= self.filterX;
-        
-       
 
         multiplier = (self.kx)**order;
 
-        temp *= multiplier;
+        temp[:] = multiplier[:, np.newaxis] * temp[:];
 
         self.invxTrans();
 
         return self.outArr.real.copy();
         
+
+    def partialY(self,field, order=1):
+
+        self.fwdyTrans(field);
+        temp = self.interyArr;
+
+
+        multiplier = (self.ky)**order;
+
+        temp[:] = multiplier[np.newaxis, :] * temp[:];
+
+        self.invyTrans();
+
+        return self.outArr.real.copy();
+       
+    def gradient(self, field):
+
+       return( [self.partialX(field), self.partialY(field)]);
+
+   def divergence(self, u, v):
+
+       return(self.partialX(u) + self.partialY(v));
+
+   def curl(self, u, v):
+
+       return(self.partialX(v) - self.partialY(u));
+
+   def laplacian(self, field):
+
+       return(self.partialX(field, 2) + self.partialY(field, 2));
+
 
 
 
