@@ -8,6 +8,10 @@ from scipy import *
 
 class specForcing(object):
     
+    # Forcing is between kmin and kmax
+    # correlation function = 0(white noise) and 1(infinitely correlated)
+    # default value = 0.5 (Ref. Maltrud (1990)).
+    
     def __init__(self, numPointsX, numPointsY, length=2*pi,
                 kmin=20.,kmax=30.,magnitude=1e4, correlation=0.5,
                 xType='Fourier', yType='Fourier'):
@@ -83,17 +87,20 @@ class specForcing(object):
         self.kx = (2*pi/length)*concatenate((arange(0,numPointsX/2),arange(-numPointsX/2,0)));
         self.ky = (2*pi/length)*concatenate((arange(0,numPointsY/2),arange(-numPointsY/2,0)));
         
-        
+# Forcing is defined in wavenumber space and later transformed to real space 
     def forcingFn(self,F0):
         
         [kxx,kyy]=meshgrid(self.kx,self.ky);
         
+        # Forcing defined as a shell in wavenumber space
         A = zeros((self.yn,self.xn));
         A[sqrt(kxx**2+kyy**2) < self.kmax] = 1.0;
         A[sqrt(kxx**2+kyy**2) < self.kmin] = 0.0;
         
         signal  = self.magnitude * A * exp(rand(self.yn,self.xn)*1j*2*pi);
         
+        
+        # Markovian forcing
         F = (sqrt(1-self.corr**2))*signal + self.corr*F0
        
         self.invTrans(F);
