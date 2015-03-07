@@ -47,7 +47,7 @@ class specTrans(object):
                     pyfftw.simd_alignment,
                     dtype='complex128');
 
-        elif (yType is 'Chebyshev'):
+        elif (yType is 'Cosine'):
 
             print 'Non-Fourier options not (yet) implemented\
                along y-axis!';
