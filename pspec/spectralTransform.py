@@ -125,3 +125,69 @@ class specTrans(object):
             pickle.dump(wisdom, fp);
 
 
+class specTrans2d(object):
+
+    def __init__(self, numPointsX, numPointsY, \
+            xType='Fourier', yType='Fourier', type='1d'):
+
+
+        self.xn = numPointsX;
+        self.yn = numPointsY;
+        self.wisdomExists = False;
+        self.isOneDimensional = False;
+        self.numCpus = multiprocessing.cpu_count();
+        self.xType = xType;
+        self.yType = yType;
+
+        self.inpArr = pyfftw.n_byte_align_empty(\
+                (numPointsX, numPointsY),\
+                pyfftw.simd_alignment,
+                dtype='complex128');
+
+        self.outArr = pyfftw.n_byte_align_empty(\
+                (numPointsX, numPointsY),\
+                pyfftw.simd_alignment,
+                dtype='complex128');
+
+        fname = str(numPointsX)+'x'+str(numPointsY)+'.wis'
+
+# Check if wisdom files exist for this combination
+
+        if(os.path.isfile(fname)):
+
+            self.wisdomExists = True;
+            print 'Wisdom available, loading...';
+            
+            fp = open(fname);
+            wisdom = pickle.load(fp);
+            
+            pyfftw.import_wisdom(wisdom);
+
+        print 'Shapes: ', self.inpArr.shape, self.interxArr.shape;
+
+        print 'Estimating optimal FFT, this may'
+        print 'take some time...';
+
+
+        self.fwdTrans = pyfftw.FFTW(\
+            self.inpArr, self.outArr, axes=[0,1],\
+            flags=['FFTW_PATIENT',],threads=self.numCpus);
+
+
+        self.invTrans = pyfftw.FFTW(\
+            self.inpArr, self.outArr, axes=[0,1],\
+            direction='FFTW_BACKWARD',
+            flags=['FFTW_PATIENT',],threads=self.numCpus);
+
+
+
+        print 'Done estimating!';
+
+        if not self.wisdomExists:
+
+            wisdom = pyfftw.export_wisdom();
+
+            fp = open(fname,'w');
+            pickle.dump(wisdom, fp);
+
+
