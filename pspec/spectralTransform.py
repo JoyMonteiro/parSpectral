@@ -163,8 +163,7 @@ class specTrans2d(object):
             
             pyfftw.import_wisdom(wisdom);
 
-        print 'Shapes: ', self.inpArr.shape, self.interxArr.shape;
-
+        print 'Shapes: ', self.inpArr.shape;
         print 'Estimating optimal FFT, this may'
         print 'take some time...';
 
