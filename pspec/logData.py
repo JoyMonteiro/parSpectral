@@ -61,7 +61,6 @@ class logData(object):
         self.ncFile.variables['time'][t] = self.currTime;
         for i in range(len(variable)):
 
-
             temp = self.ncFile.variables[variable[i]];
             temp[t,:] = fields[i];
 
