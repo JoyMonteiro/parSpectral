@@ -1,10 +1,7 @@
-import pyfftw
-import os.path
-import pickle
-import multiprocessing
 from numpy import arange, pi, zeros, exp
-from numpy.fft.helper import ifftshift
+#from numpy.fft.helper import ifftshift
 from scipy import *
+from spectralTransform import specTrans2d;
 
 class specForcing(object):
     
@@ -16,26 +13,8 @@ class specForcing(object):
                 kmin=20.,kmax=30.,magnitude=1e4, correlation=0.5,
                 xType='Fourier', yType='Fourier'):
 
-        self.inpArr = pyfftw.n_byte_align_empty(\
-                (numPointsY, numPointsX),\
-                pyfftw.simd_alignment,
-                dtype='complex128');
-
-        self.outArr = pyfftw.n_byte_align_empty(\
-                (numPointsY, numPointsX),\
-                pyfftw.simd_alignment,
-                dtype='complex128');
-                
-        self.prevForcing = pyfftw.n_byte_align_empty(\
-                (numPointsY, numPointsX),\
-                pyfftw.simd_alignment,
-                dtype='complex128');
-
         self.xn = numPointsX;
         self.yn = numPointsY;
-        self.wisdomExists = False;
-        self.isOneDimensional = False;
-        self.numCpus = multiprocessing.cpu_count();
         self.xType = xType;
         self.yType = yType;
         self.kmin = kmin;
@@ -43,44 +22,7 @@ class specForcing(object):
         self.magnitude = magnitude;
         self.corr = correlation;
 
-
-        fname = str(numPointsX)+'x'+str(numPointsY)+'.wis'
-
-# Check if wisdom files exist for this combination
-
-        if(os.path.isfile(fname)):
-
-            self.wisdomExists = True;
-            print 'Wisdom available, loading...';
-            
-            fp = open(fname);
-            wisdom = pickle.load(fp);
-            
-            pyfftw.import_wisdom(wisdom);
-
-        print 'Shapes: ', self.inpArr.shape;
-
-        print 'Estimating optimal FFT, this may'
-        print 'take some time...';
-
-
-
-
-
-        self.invTrans = pyfftw.FFTW(\
-            self.inpArr, self.outArr, axes=[0,1],\
-            direction='FFTW_BACKWARD',
-            flags=['FFTW_PATIENT',],threads=self.numCpus);
-
-
-        print 'Done estimating!';
-
-        if not self.wisdomExists:
-
-            wisdom = pyfftw.export_wisdom();
-
-            fp = open(fname,'w');
-            pickle.dump(wisdom, fp);
+        self.trans = specTrans2d(numPointsX, numPointsY, xType, yType);
 
 
         #Prepare the wavenumber arrays
@@ -103,7 +45,7 @@ class specForcing(object):
         # Markovian forcing
         F = (sqrt(1-self.corr**2))*signal + self.corr*F0
        
-        self.invTrans(F);
-        return self.outArr.real.copy();
+        self.trans.invTrans(F);
+        return self.trans.outArr.real.copy();
     
 
