@@ -8,13 +8,24 @@ fields = ['pv', 'vort'];
 
 logger = logData.logData(filename, fields, ['xdim','ydim'], [xdim, ydim]);
 
-pvField = np.zeros((xdim,ydim));
-vortField = np.zeros((xdim,ydim));
+pvField = np.random.rand(xdim,ydim);
+vortField = np.random.rand(xdim,ydim);
+logger.writeData([pvField, vortField]);
 
+pvField = np.random.rand(xdim,ydim);
+vortField = np.random.rand(xdim,ydim);
 logger.writeData([pvField, vortField]);
+
+pvField = np.random.rand(xdim,ydim);
+vortField = np.random.rand(xdim,ydim);
 logger.writeData([pvField, vortField]);
+
+pvField = np.random.rand(xdim,ydim);
+vortField = np.random.rand(xdim,ydim);
 logger.writeData([pvField, vortField]);
-logger.writeData([pvField, vortField]);
+
+pvField = np.random.rand(xdim,ydim);
+vortField = np.random.rand(xdim,ydim);
 logger.writeData([pvField, vortField]);
 
 
