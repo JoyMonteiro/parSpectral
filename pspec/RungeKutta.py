@@ -29,7 +29,7 @@ class RungeKutta4(object):
         self.calcMaxVel = maxVel;
 
     
-    def integrate(self, t, fields, args=None, dt=0):
+    def integrate(self, t, fields,dt=0, args=None):
 
         """
         Integrator routine
@@ -56,7 +56,8 @@ class RungeKutta4(object):
             dT = self.cflConstant*timeStep;
             dT = min(dT, 0.1);
 
-        print 'Time step: ', dT;
+        #print 'Time step: ', dT;
+
 
         dt = dT/2.;
 
@@ -77,8 +78,10 @@ class RungeKutta4(object):
 
         fnew = f + dt*k;
 
-        fnew = self.diffusion(dt, fnew, args);
+        fnew = self.diffusion(dt, fnew);
 
         tnew = t + dT;
+	
+	print 'Time:', tnew;
 
-        return (tnew, fnew);
+	return (tnew, fnew);

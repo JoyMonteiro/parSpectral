@@ -18,6 +18,6 @@ delta = 0.1;
 
 stepfwd = RungeKutta.RungeKutta4(delta, dummy, dummy, dummyVel);
 
-tnew, fnew = stepfwd.integrate(0, [u,v,z]);
+tnew, fnew = stepfwd.integrate(0, [u,v,z],0.1);
 
 print tnew;

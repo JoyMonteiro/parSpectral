@@ -26,18 +26,18 @@ class specForcing(object):
 
 
         #Prepare the wavenumber arrays
-        self.kx = (2*pi/length)*concatenate((arange(0,numPointsX/2),arange(-numPointsX/2,0)));
-        self.ky = (2*pi/length)*concatenate((arange(0,numPointsY/2),arange(-numPointsY/2,0)));
+        self.kxx = (2*pi/length)*concatenate((arange(0,numPointsX/2),arange(-numPointsX/2,0)));
+        self.kyy = (2*pi/length)*concatenate((arange(0,numPointsY/2),arange(-numPointsY/2,0)));
         
 # Forcing is defined in wavenumber space and later transformed to real space 
     def forcingFn(self,F0):
         
-        [kxx,kyy]=meshgrid(self.kx,self.ky);
+        [kx,ky]=meshgrid(self.kxx,self.kyy);
         
         # Forcing defined as a shell in wavenumber space
         A = zeros((self.yn,self.xn));
-        A[sqrt(kxx**2+kyy**2) < self.kmax] = 1.0;
-        A[sqrt(kxx**2+kyy**2) < self.kmin] = 0.0;
+        A[sqrt(kx**2+ky**2) < self.kmax] = 1.0;
+        A[sqrt(kx**2+ky**2) < self.kmin] = 0.0;
         
         signal  = self.magnitude * A * exp(rand(self.yn,self.xn)*1j*2*pi);
         
