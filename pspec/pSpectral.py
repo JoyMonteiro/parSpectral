@@ -24,11 +24,11 @@ class parSpectral(object):
         preserveX = self.xn/3;
         truncateX = self.xn/2 - preserveX;
 
-        filterX = zeros((self.xn/2+1, 1));
-        filterX[0:preserveX, 0] = 1.;
+        filterX = zeros((1, self.xn/2+1));
+        filterX[0, 0:preserveX] = 1.;
 
         i = arange(preserveX, self.xn/2);
-        filterX[i, 0] = exp((preserveX-i)/3.);
+        filterX[0, i] = exp((preserveX-i)/3.);
 
         self.filterX = filterX;
 
@@ -36,11 +36,11 @@ class parSpectral(object):
         preserveY = self.yn/3;
         truncateY = self.yn/2 - preserveY;
 
-        filterY = zeros((1, self.yn/2+1));
-        filterY[0, 0:preserveY] = 1.;
+        filterY = zeros((self.yn/2+1, 1));
+        filterY[0:preserveY, 0] = 1.;
 
         i = arange(preserveY, self.yn/2);
-        filterY[0, i] = exp((preserveY-i)/3.);
+        filterY[i, 0] = exp((preserveY-i)/3.);
 
         self.filterY = filterY;
 
@@ -53,7 +53,7 @@ class parSpectral(object):
 
         multiplier = (self.kx)**order;
 
-        temp[:] = multiplier[:, np.newaxis] * temp[:];
+        temp[:] = multiplier[np.newaxis, :] * temp[:];
 
         self.trans.invxTrans();
 
@@ -68,7 +68,7 @@ class parSpectral(object):
 
         multiplier = (self.ky)**order;
 
-        temp[:] = multiplier[np.newaxis, :] * temp[:];
+        temp[:] = multiplier[:, np.newaxis] * temp[:];
 
         self.trans.invyTrans();
 
@@ -79,7 +79,7 @@ class parSpectral(object):
        return( [self.partialX(field), self.partialY(field)]);
 
     def divergence(self, u, v):
-
+        
        return(self.partialX(u) + self.partialY(v));
 
     def curl(self, u, v):
@@ -87,9 +87,9 @@ class parSpectral(object):
        return(self.partialX(v) - self.partialY(u));
 
     def laplacian(self, field):
+        
+        return(self.partialX(field, 2) + self.partialY(field, 2));
 
-       return(self.partialX(field, 2) + self.partialY(field, 2));
+    def jacobian(self, a, b ):
 
-
-
-
+        return(self.partialX(a)*self.partialY(b) - self.partialX(b)*self.partialY(a));
