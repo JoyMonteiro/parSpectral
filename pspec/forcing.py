@@ -9,8 +9,8 @@ class specForcing(object):
     # correlation function = 0(white noise) and 1(infinitely correlated)
     # default value = 0.5 (Ref. Maltrud (1990)).
     
-    def __init__(self, numPointsX, numPointsY, length=2*pi,
-                kmin=20.,kmax=30.,magnitude=1e4, correlation=0.5,
+    def __init__(self, numPointsX, numPointsY,kmin=20.,kmax=30.,
+                magnitude=1e4, correlation=0.5, length = 2*pi,
                 xType='Fourier', yType='Fourier'):
 
         self.xn = numPointsX;
