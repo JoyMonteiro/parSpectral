@@ -17,10 +17,10 @@ yy = linspace(-pi,pi-2*pi/Ny,Ny);
 
 
 
-diff = diffusion.specDiffusion(Nx,Ny, alpha=2e-3, nu=1e-12);
+diff = diffusion.specDiffusion(Nx,Ny, alpha=2e-3, nu=1e-16);
 p = pSpectral.parSpectral(Nx,Ny);
 inv = inversion.specInv(Nx,Ny);
-fr = forcing.specForcing(Nx,Ny,18., 22.);
+fr = forcing.specForcing(Nx,Ny,38., 42.);
 
 F0 = fr.forcingFn(0);
 
@@ -34,9 +34,17 @@ def dfdt(t,f, args=None):
     
     return out;
 
+
+def diffusion(dt, f):
+
+    omega = p.laplacian(f);
+    out = diff.diffusionFn(dt, omega);
+
+    return inv.invLaplacian(out);
+
 delta = 2*pi/max(Nx,Ny);
 
-stepfwd = RungeKutta.RungeKutta4(delta,dfdt, diff.diffusionFn ,1);
+stepfwd = RungeKutta.RungeKutta4(delta,dfdt, diffusion ,1);
 
 t=0;
 a = inv.invLaplacian(F0);
