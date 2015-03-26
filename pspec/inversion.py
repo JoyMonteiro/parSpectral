@@ -27,25 +27,24 @@ class specInv(object):
     def laplacian(self, field):
 
         self.trans.fwdTrans(field);
-        temp = self.trans.outArr.copy();
+        temp = self.trans.intArr;
         
 
         delsq = -(self.kx**2+self.ky**2);
-        delsq[0,0] = 1;
+        #delsq[0,0] = 1;
 
         temp = temp*delsq;
 
         # Filter
         temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
 
-        self.trans.invTrans(temp);
         return self.trans.outArr.real.copy();
        
 
     def invLaplacian(self, field):
 
         self.trans.fwdTrans(field);
-        temp = self.trans.outArr.copy();
+        temp = self.trans.intArr.copy();
         
 
         delsq = -(self.kx**2+self.ky**2);
