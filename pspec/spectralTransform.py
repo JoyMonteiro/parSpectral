@@ -144,10 +144,16 @@ class specTrans2d(object):
                 pyfftw.simd_alignment,
                 dtype='complex128');
 
+        self.intArr = pyfftw.n_byte_align_empty(\
+                (numPointsY, numPointsX),\
+                pyfftw.simd_alignment,
+                dtype='complex128');
+
         self.outArr = pyfftw.n_byte_align_empty(\
                 (numPointsY, numPointsX),\
                 pyfftw.simd_alignment,
                 dtype='complex128');
+
 
         fname = str(numPointsX)+'x'+str(numPointsY)+'_2d'+'.wis'
 
@@ -169,12 +175,12 @@ class specTrans2d(object):
 
 
         self.fwdTrans = pyfftw.FFTW(\
-            self.inpArr, self.outArr, axes=[0,1],\
+            self.inpArr, self.intArr, axes=[0,1],\
             flags=['FFTW_PATIENT',],threads=self.numCpus);
 
 
         self.invTrans = pyfftw.FFTW(\
-            self.inpArr, self.outArr, axes=[0,1],\
+            self.intArr, self.outArr, axes=[1,0],\
             direction='FFTW_BACKWARD',
             flags=['FFTW_PATIENT',],threads=self.numCpus);
 
