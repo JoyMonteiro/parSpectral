@@ -33,7 +33,7 @@ class specInv(object):
         delsq = -(self.kx**2+self.ky**2);
         #delsq[0,0] = 1;
 
-        temp = temp*delsq;
+        temp *= delsq;
 
         # Filter
         temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
@@ -51,7 +51,7 @@ class specInv(object):
         delsq = -(self.kx**2+self.ky**2);
         delsq[0,0] = 1;
 
-        temp = temp/delsq;
+        temp /= delsq;
         
         # Filter
         temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
