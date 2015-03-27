@@ -38,13 +38,14 @@ class specInv(object):
         # Filter
         temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
 
+        self.trans.invTrans();
         return self.trans.outArr.real.copy();
        
 
     def invLaplacian(self, field):
 
         self.trans.fwdTrans(field);
-        temp = self.trans.intArr.copy();
+        temp = self.trans.intArr;
         
 
         delsq = -(self.kx**2+self.ky**2);
@@ -55,6 +56,6 @@ class specInv(object):
         # Filter
         temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
 
-        self.trans.invTrans(temp);
+        self.trans.invTrans();
         return self.trans.outArr.real.copy();
 
