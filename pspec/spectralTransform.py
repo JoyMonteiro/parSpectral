@@ -180,7 +180,7 @@ class specTrans2d(object):
 
 
         self.invTrans = pyfftw.FFTW(\
-            self.intArr, self.outArr, axes=[1,0],\
+            self.intArr, self.outArr, axes=[0,1],\
             direction='FFTW_BACKWARD',
             flags=['FFTW_PATIENT',],threads=self.numCpus);
 
