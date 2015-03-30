@@ -6,7 +6,7 @@ import inversion;
 
 class specDiffusion(object):
     
-    def __init__(self, numPointsX, numPointsY,alpha, nu,  \
+    def __init__(self, numPointsX, numPointsY,alpha, nu,\
         order = 8., length = 2*pi, xType='Fourier', yType='Fourier'):
         # nu is the higher "order" dissipation coefficient
         # alpha is the linear drag
@@ -32,7 +32,13 @@ class specDiffusion(object):
     	self.trans.fwdTrans(field);
     	temp = self.trans.intArr;
     	
-    	temp = temp * exp(-(self.nu*(kx**self.order+ky**self.order) + self.alpha) * dt)
+    	temp *= exp(-(self.nu*(kx**self.order+ky**self.order) + self.alpha) *
+                dt);
+
+        temp[sqrt(kx**2+ky**2) > min(self.xn, self.yn)/3.] = 0;
+
+
+        
     
     	self.trans.invTrans();
     	return self.trans.outArr.real.copy();
