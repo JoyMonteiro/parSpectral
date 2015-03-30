@@ -28,7 +28,7 @@ class parSpectral(object):
         filterX[0, 0:preserveX] = 1.;
 
         i = arange(preserveX, self.xn/2);
-        filterX[0, i] = exp((preserveX-i)/3.);
+        filterX[0, i] = exp((preserveX-i)/1.);
 
         self.filterX = filterX;
 
@@ -40,7 +40,7 @@ class parSpectral(object):
         filterY[0:preserveY, 0] = 1.;
 
         i = arange(preserveY, self.yn/2);
-        filterY[i, 0] = exp((preserveY-i)/3.);
+        filterY[i, 0] = exp((preserveY-i)/1.);
 
         self.filterY = filterY;
 
@@ -54,6 +54,7 @@ class parSpectral(object):
         multiplier = (self.kx)**order;
 
         temp[:] = multiplier[np.newaxis, :] * temp[:];
+        temp[:] = self.filterX * temp[:];
 
         self.trans.invxTrans();
 
@@ -69,6 +70,7 @@ class parSpectral(object):
         multiplier = (self.ky)**order;
 
         temp[:] = multiplier[:, np.newaxis] * temp[:];
+        temp[:] = self.filterY* temp[:];
 
         self.trans.invyTrans();
 
