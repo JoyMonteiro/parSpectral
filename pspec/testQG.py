@@ -17,10 +17,10 @@ yy = linspace(-pi,pi-2*pi/Ny,Ny);
 
 
 
-diff = diffusion.specDiffusion(Nx,Ny, alpha=2e-3, nu=1e-16);
+diff = diffusion.specDiffusion(Nx,Ny, alpha=2e-3, nu=1e-15);
 p = pSpectral.parSpectral(Nx,Ny);
 inv = inversion.specInv(Nx,Ny);
-fr = forcing.specForcing(Nx,Ny,38., 42.);
+fr = forcing.specForcing(Nx,Ny,48., 52.);
 
 F0 = fr.forcingFn(0);
 
