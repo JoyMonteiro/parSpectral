@@ -32,6 +32,12 @@ actual = -x*10*y**9* test;
 #test = (x**10)*(y**10);
 #actual = 10*(y**9)*(x**10);
 
-ans = a.partialChebY(test);
-print amax(ans-actual);
+ans1 = a.partialChebY(test);
+#ans 1 uses fftw and ans2 rfft
+ans2 = a.ChebY(test);
+
+print 'Usinf FFTW:'
+print amax(ans1-actual);
+print 'Using rfft:'; 
+print amax(ans2-actual);
 
