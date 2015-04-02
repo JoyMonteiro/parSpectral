@@ -1,9 +1,10 @@
 import numpy as np;
-from numpy import arange, pi, zeros, exp;
+from numpy import arange, pi, zeros, exp, cos;
 from spectralTransform import specTrans;
+from numpy import vstack, transpose, newaxis, linspace, sum;
 
 #from numpy.fft.helper import ifftshift;
-#from numpy.fft import rfft, ifft, fft2,ifft2;
+from numpy.fft import rfft, irfft, fft2,ifft2;
 
 class parSpectral(object):
 
@@ -18,6 +19,8 @@ class parSpectral(object):
         #Prepare the wavenumber arrays
         self.kx = 2*pi*1j*(arange(numPointsX/2+1))/length;
         self.ky = 2*pi*1j*(arange(numPointsY/2+1))/length;
+
+        self.cby = cos(linspace(0,pi, numPointsY));
 
         #Prepare the filters
 
@@ -75,6 +78,57 @@ class parSpectral(object):
         self.trans.invyTrans();
 
         return self.trans.outArr.real.copy();
+
+    def partialChebY(self,field):
+
+        N = self.yn - 1;
+        z = cos(arange(0, N+1)*pi/N);
+        mf = arange(0, N+1);
+        m = mf[:, newaxis];
+        ans = zeros((N+1, self.xn));
+
+        newField = vstack((field, field[N-1:0:-1]));
+        self.trans.fwdyTrans(newField);
+        temp = self.trans.interCbyArr;
+
+        multiplier = 1j*m;
+        mtemp = multiplier* temp;
+
+        self.trans.invyTrans(mtemp);
+        out = self.trans.outCbyArr.real.copy();
+
+        ans[1:N,:] = -out[1:N,:]/ (1- self.cby[1:N, np.newaxis]**2)**0.5; 
+
+        ans[0,:] = sum(m**2 * temp[mf,:], axis=0)/N + 0.5*N*temp[N,:];
+
+        ans[N,:] = sum( (-1)**(m+1) * m**2 * temp[mf,:], axis=0)/N + 0.5*(-1**(N+1))* N * temp[N];
+
+        return ans;
+
+    def ChebY(self,field):
+
+        N = self.yn - 1;
+        z = cos(arange(0, N+1)*pi/N);
+        mf = arange(0, N+1);
+        m = mf[:, newaxis];
+        ans = zeros((N+1, self.xn));
+
+        newField = vstack((field, field[N-1:0:-1]));
+
+        temp = rfft(newField, axis=0); 
+
+        multiplier = 1j*m;
+        mtemp = multiplier* temp;
+
+        out = irfft(mtemp, axis=0);
+
+        ans[1:N,:] = -out[1:N,:]/ (1- self.cby[1:N, np.newaxis]**2)**0.5; 
+
+        ans[0,:] = sum(m**2 * temp[mf,:], axis=0)/N + 0.5*N*temp[N,:];
+
+        ans[N,:] = sum( (-1)**(m+1) * m**2 * temp[mf,:], axis=0)/N + 0.5*(-1**(N+1))* N * temp[N];
+
+        return ans;
        
     def gradient(self, field):
 
