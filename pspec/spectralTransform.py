@@ -7,7 +7,7 @@ import os.path;
 class specTrans(object):
 
     def __init__(self, numPointsX, numPointsY, \
-            xType='Fourier', yType='Fourier'):
+                 xType='Fourier', yType='Fourier'):
 
 
         self.xn = numPointsX;

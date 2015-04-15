@@ -23,8 +23,8 @@ inv = inversion.specInv(Nx,Ny)
 def dfdt(t,f, arge=None):
 
     [u,v,n] = f
-    u1 = -g*p.partialX(n) -u*p.partialX(u) -v*p.partialY(u) -f0*u
-    v1 = -g*p.partialY(n) -u*p.partialX(v) -v*p.partialY(v) +f0*v
+    u1 = -g*p.partialX(n) -u*p.partialX(u) -v*p.partialY(u) +f0*v
+    v1 = -g*p.partialY(n) -u*p.partialX(v) -v*p.partialY(v) -f0*u
     n1 = -(H+n)*( p.partialX(u) + p.partialY(v)) -u*p.partialX(n) 
     -v*p.partialY(n)
 
@@ -53,7 +53,7 @@ n0 = 0.001*exp(- (x**2/0.1 + y**2/0.1))
 u = u0
 v = v0
 n = n0
-f0 = 0
+f0 = y
 
 g=1
 H=0.01
@@ -78,3 +78,4 @@ while (t<100):
         ylim(-pi,pi)
         colorbar()
         pause(1e-3)
+

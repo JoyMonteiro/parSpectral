@@ -11,7 +11,7 @@ Ny=128;
 xx = linspace(-pi,pi-2*pi/Nx,Nx);
 yy = linspace(-pi,pi-2*pi/Ny,Ny);
 [y,x]=  meshgrid(xx,yy);
-a = sin(x)+sin(x)*cos(y);
+a = sin(30*x)+sin(40*x)*cos(50*y);
 
 
 
@@ -20,12 +20,16 @@ p = pSpectral.parSpectral(Nx,Ny);
 
 def dfdt(t,f,arge=None):
     return 0.1*p.laplacian(f);
-dt=0.1;
+    #return f-f;
+dt=0.001;
+
+def dfsn(dt,f):
+    return f;
 
 
 delta = 2*pi/max(Nx,Ny);
 
-stepfwd = RungeKutta.RungeKutta4(delta,dfdt, diff.diffusionFn ,1);
+stepfwd = RungeKutta.RungeKutta4(delta,dfdt, dfsn ,1);
 
 t = 0;
 f = a;
