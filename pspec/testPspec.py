@@ -19,8 +19,8 @@ ky = (lengthY/(2*pi))*linspace( -pi,pi-2*pi/Ny,Ny);
 
 b = sin(x/10.)*cos(y);
 bx = 0.1*cos(x/10.)*cos(y);
-bxx = -b;
-by = -sin(x)*sin(y);
+bxx = -0.1*0.1*b;
+by = -sin(0.1*x)*sin(y);
 
 outx = a.partialX(b);	
 outxx = a.partialX(b,2);	

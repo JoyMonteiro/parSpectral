@@ -14,7 +14,9 @@ class parSpectral(object):
         self.xn = numPointsX
         self.yn = numPointsY
 
-        self.trans = specTrans(numPointsX, numPointsY, xType, yType)
+	numCPU = 4
+
+        self.trans = specTrans(numPointsX, numPointsY, xType, yType, numCPU)
 
         #Prepare the wavenumber arrays
         self.kx = 2*pi*1j*(arange(numPointsX/2+1))/lengthX

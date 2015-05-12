@@ -26,10 +26,10 @@ p = pSpectral.parSpectral(Nx,Ny, lengthX, lengthY, 'Fourier', 'Cosine')
 
 
 
-def dfdt(t,f, arge=None):
+def dfdt(t,f, args=None):
 
     [u,v,n] = f
-    u1 = -g*p.partialX(n)  +f0*v -epsilon*u
+    u1 = -g*p.partialX(n) +f0*v -epsilon*u
     v1 = -g*p.ChebMatY(n) -f0*u -epsilon*v
     n1 = -n0 -(H+n)*( p.partialX(u) + p.ChebMatY(v)) - epsilon*n 
     return u1,v1,n1

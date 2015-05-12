@@ -7,14 +7,17 @@ import os.path;
 class specTrans(object):
 
     def __init__(self, numPointsX, numPointsY, \
-                 xType='Fourier', yType='Fourier'):
+                 xType='Fourier', yType='Fourier', numCPU = None):
 
 
         self.xn = numPointsX;
         self.yn = numPointsY;
         self.wisdomExists = False;
         self.isOneDimensional = False;
-        self.numCpus = multiprocessing.cpu_count();
+	if numCPU:
+        	self.numCpus = numCPU;
+	else:
+		self.numCpus = multiprocessing.cpu_count();
         self.xType = xType;
         self.yType = yType;
 

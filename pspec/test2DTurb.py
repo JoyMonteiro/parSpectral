@@ -7,8 +7,8 @@ import inversion;
 
 ion();
 
-Nx = 256;
-Ny = 256;
+Nx = 256*4;
+Ny = 256*4;
 
 xx = linspace(0,2*pi-2*pi/Nx,Nx);
 yy = linspace(0,2*pi-2*pi/Ny,Ny);
@@ -27,7 +27,6 @@ def dfdt(t,f, args=None):
     omega = p.laplacian(f);
     rhs = -p.jacobian(f,omega) ;
     out = inv.invLaplacian(rhs);
-    #out =0;
     return out;
 
 def diffusion(dt, f):
