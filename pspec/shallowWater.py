@@ -76,8 +76,6 @@ def dfdt(t,fn,args=None):
     vrt = x.spectogrd(vrtsp)
     u,v = x.getuv(vrtsp,divsp)
     phi = x.spectogrd(phisp)
-
-
     
     tmp1 = u*(vrt+f)
     tmp2 = v*(vrt+f)
@@ -96,7 +94,6 @@ def dfdt(t,fn,args=None):
     tmpf = x.grdtospec(phi+ 0.5*(u**2+v**2))
     ddivsp = tmpa - x.lap*tmpf
 
-
     return [dvrtsp, ddivsp, dphisp] 
 
 
@@ -113,13 +110,19 @@ stepfwd = AdamsBashforth.AdamBash(dfdt,diffusion, ncycle=0)
 tmax = 6*86400
 t=0
 dt = 150
+plt.ion()
 
 while(t< tmax):
 
     t,[vrtsp,divsp,phisp] = stepfwd.integrate(t,[vrtsp,divsp,phisp], dt)
-
+    print 'Time:', t
+    
 vrt = x.spectogrd(vrtsp)
 div = x.spectogrd(divsp)
 phi = x.spectogrd(phisp)
 
+plt.clf()
 pv = (0.5*hbar*grav/omega)*(vrt+f)/phi
+plt.imshow(pv)
+plt.pause(1e-3)
+

@@ -8,7 +8,7 @@ class AdamBash(object):
         
         
         #self.delta = delta
-        #self.cflConstant = 0.5
+        self.cflConstant = 0.5
         self.ncycle = ncycle
         self.dfdt = dfdt
         self.diffusion = diffusion
@@ -36,17 +36,19 @@ class AdamBash(object):
         f1 = F1 + dt*((23/12.)*fnew - (16/12.)*self.fnow + (5/12.)*self.fold)
 
         fq = self.diffusion(dt,f1)
+
         tnew = t+dt
 
         self.fold = self.fnow.copy()
         self.fnow = fnew.copy()
+        
+        self.ncycle += 1
 
-	self.ncycle += 1
-
-        print 'Time:', tnew
+        #print 'Time:', tnew
 
 
         return (tnew,fq)
+
 
 
 

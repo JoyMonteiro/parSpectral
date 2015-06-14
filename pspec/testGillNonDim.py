@@ -55,7 +55,8 @@ t=0
 
 F = cos(pi/2./L * x)
 F[abs(x)>L]=0
-Q = F * exp(-10*y**2/4.)
+Q = -F * exp(-10*y**2/4.)
+#Q = exp(-10*y**2/4.-1*x**2/4.)
 
 
 u0 = zeros((Ny,Nx))
@@ -68,7 +69,7 @@ pr = -Q
 c=1.
 dt=0.5*delta/c
 dt=0.003
-ii = 0
+ii = -1
 
 while (t<10000):
     tnew,[unew,vnew,prnew] = stepfwd.integrate(t,[u,v,pr],dt)
@@ -76,11 +77,11 @@ while (t<10000):
     [u,v,pr] = [unew,vnew,prnew]
     ii = ii+1
     
-    if mod(ii,10)==0:
+    if mod(ii,100)==0:
         clf();
         #pcolormesh(x,y,u)
         #pcolormesh(x,y,v)
-        pcolormesh(x,y,pr)
+        contourf(x,y,pr,10)
 
         colorbar()
         pause(1e-3)

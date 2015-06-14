@@ -1,13 +1,3 @@
-#!/usr/bin/python
-
-## "non-linear barotropically unstable shallow water test case"
-## example provided by Jeffrey Whitaker
-## https://gist.github.com/jswhit/3845307
-##
-## Running the script should pop up a window with this image:
-## http://i.imgur.com/ZlxR1.png
-
-
 import numpy as np
 import shtns
 
@@ -22,7 +12,7 @@ class Spharmt(object):
 		nlons:  number of longitudes
 		nlats:  number of latitudes"""
 		self._shtns = shtns.sht(ntrunc, ntrunc, 1, \
-								shtns.sht_orthonormal+shtns.SHT_NO_CS_PHASE)
+                        shtns.sht_orthonormal+shtns.SHT_NO_CS_PHASE)
 		if gridtype == 'gaussian':
 			#self._shtns.set_grid(nlats,nlons,shtns.sht_gauss_fly|shtns.SHT_PHI_CONTIGUOUS,1.e-10)
 			self._shtns.set_grid(nlats,nlons,shtns.sht_quick_init|shtns.SHT_PHI_CONTIGUOUS,1.e-10)
