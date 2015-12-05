@@ -8,15 +8,13 @@ class logData(object):
     writing fields to a nc file
     """
 
-    def __init__(self, filename, fieldnames, dimNames, dims, dt=1, currTime=0, \
+    def __init__(self, filename, fieldnames, dimNames, dt=1, currTime=0, \
             overwrite=False):
 
-        assert len(dimNames) == len(dims), \
-            "number of dimensions must match dimension names";
 
         self.name = filename;
         self.fields = fieldnames;
-        self.dims = dims;
+        self.dims = dimNames;
         self.dt = dt;
         self.currTime = currTime;
 
@@ -28,21 +26,22 @@ class logData(object):
             self.ncFile.createDimension('time', None);
 
         # Create dimensions
-        for i in range(len(dims)):
-            self.ncFile.createDimension(dimNames[i], dims[i]);
+        for dimension in dimNames.keys():
+            self.ncFile.createDimension(dimension, dimNames[dimension]);
 
         # Create variables
 
         self.ncFile.createVariable('time', 'u8', ('time',));
 
-        for i in range(len(fieldnames)):
-            self.ncFile.createVariable(fieldnames[i],'f8', \
-                    self.ncFile.dimensions.keys());
+        for field in fieldnames.keys():
+            self.ncFile.createVariable(field,'f8', \
+                    fieldnames[field]);
 
 
         self.ncFile.description = 'Simulation data';
 
         print 'Created file ' + filename;
+        print self.ncFile
 
 
     def writeData(self, fields):

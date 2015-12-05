@@ -115,12 +115,12 @@ while(t< tmax):
         phi = x.spectogrd(phisp)
 
 
-        plt.clf()
+        #plt.clf()
     #    pv = (0.5*hbar*grav/omega)*(vrt+f)/phi
-        plt.contourf(lons,lats,phi,10)
+        #plt.contourf(lons,lats,phi,10)
 #        plt.pcolormesh(lons,lats,phi)
-        plt.colorbar()
-        plt.pause(1e-3)
+        #plt.colorbar()
+        #plt.pause(1e-3)
 
 
 

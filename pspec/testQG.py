@@ -7,8 +7,8 @@ import inversion;
 
 ion();
 
-Nx = 256;
-Ny = 256;
+Nx = 512;
+Ny = 512;
 
 xx = linspace(-pi,pi-2*pi/Nx,Nx);
 yy = linspace(-pi,pi-2*pi/Ny,Ny);
@@ -20,7 +20,7 @@ yy = linspace(-pi,pi-2*pi/Ny,Ny);
 diff = diffusion.specDiffusion(Nx,Ny, alpha=2e-3, nu=1e-15);
 p = pSpectral.parSpectral(Nx,Ny);
 inv = inversion.specInv(Nx,Ny);
-fr = forcing.specForcing(Nx,Ny,48., 52.);
+fr = forcing.specForcing(Nx,Ny,48., 52.,magnitude=5e4);
 
 F0 = fr.forcingFn(0);
 
@@ -49,7 +49,7 @@ stepfwd = RungeKutta.RungeKutta4(delta,dfdt, diffusion ,1);
 t=0;
 a = inv.invLaplacian(F0);
 f = a;
-dt=0.02;
+dt=0.005;
 ii = 0;
 
 while (t<1000):

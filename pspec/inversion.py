@@ -28,15 +28,16 @@ class specInv(object):
 
         self.trans.fwdTrans(field);
         temp = self.trans.intArr;
+        self.temp1 = self.trans.intArr.copy();
         
 
         delsq = -(self.kx**2+self.ky**2);
         #delsq[0,0] = 1;
 
-        temp *= delsq;
-
         # Filter
-        temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
+        temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/2.5] = 0;
+
+        temp *= delsq;
 
         self.trans.invTrans();
         return self.trans.outArr.real.copy();
@@ -54,7 +55,7 @@ class specInv(object):
         temp /= delsq;
         
         # Filter
-        temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/3.] = 0;
+        temp[sqrt(self.kx**2+self.ky**2) > min(self.xn, self.yn)/2.5] = 0;
 
         self.trans.invTrans();
         return self.trans.outArr.real.copy();
