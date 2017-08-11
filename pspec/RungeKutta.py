@@ -82,6 +82,6 @@ class RungeKutta4(object):
 
         tnew = t + dT;
 	
-	print 'Time:', tnew;
+        print ('Time:', tnew);
 
-	return (tnew, fnew);
+        return (tnew, fnew);

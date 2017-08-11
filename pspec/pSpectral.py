@@ -14,7 +14,7 @@ class parSpectral(object):
         self.xn = numPointsX
         self.yn = numPointsY
 
-	numCPU = 4
+        numCPU = 4
 
         self.trans = specTrans(numPointsX, numPointsY, xType, yType, numCPU)
 
