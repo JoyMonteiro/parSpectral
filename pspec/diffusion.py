@@ -29,17 +29,17 @@ class specDiffusion(object):
 
 
         [kx,ky] = meshgrid(self.kxx,self.kyy);
-    	self.trans.fwdTrans(field);
-    	temp = self.trans.intArr;
+        self.trans.fwdTrans(field);
+        temp = self.trans.intArr;
     	
-    	temp *= exp(-(self.nu*(kx**self.order+ky**self.order) + self.alpha) *
-                dt);
+        temp *= exp(-(self.nu*(kx**self.order+ky**self.order) + self.alpha) *
+            dt);
 
         temp[sqrt(kx**2+ky**2) > min(self.xn, self.yn)/3.] = 0;
 
 
         
     
-    	self.trans.invTrans();
-    	return self.trans.outArr.real.copy();
+        self.trans.invTrans();
+        return self.trans.outArr.real.copy();
             

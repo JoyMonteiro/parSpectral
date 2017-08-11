@@ -14,10 +14,10 @@ class specTrans(object):
         self.yn = numPointsY;
         self.wisdomExists = False;
         self.isOneDimensional = False;
-	if numCPU:
-        	self.numCpus = numCPU;
-	else:
-		self.numCpus = multiprocessing.cpu_count();
+        if numCPU:
+                self.numCpus = numCPU;
+        else:
+	        self.numCpus = multiprocessing.cpu_count();
         self.xType = xType;
         self.yType = yType;
 
@@ -41,8 +41,8 @@ class specTrans(object):
                     dtype='complex128');
         else:
             
-            print 'Non-Fourier options not implemented\
-               along x-axis!';
+            print ('Non-Fourier options not implemented\
+               along x-axis!');
             sys.exit();
             
         if (yType is 'Fourier'):
@@ -79,17 +79,17 @@ class specTrans(object):
         if(os.path.isfile(fname)):
 
             self.wisdomExists = True;
-            print 'Wisdom available, loading...';
+            print ('Wisdom available, loading...');
             
             fp = open(fname);
             wisdom = pickle.load(fp);
             
             pyfftw.import_wisdom(wisdom);
 
-        print 'Shapes: ', self.inpArr.shape, self.interxArr.shape;
+        print ('Shapes: ', self.inpArr.shape, self.interxArr.shape);
 
-        print 'Estimating optimal FFT, this may'
-        print 'take some time...';
+        print( 'Estimating optimal FFT, this may')
+        print( 'take some time...');
 
 
 
@@ -143,7 +143,7 @@ class specTrans(object):
                     direction='FFTW_BACKWARD',
                     flags=['FFTW_PATIENT',],threads=self.numCpus);
 
-        print 'Done estimating!';
+        print ('Done estimating!');
 
         if not self.wisdomExists:
 
@@ -190,16 +190,16 @@ class specTrans2d(object):
         if(os.path.isfile(fname)):
 
             self.wisdomExists = True;
-            print 'Wisdom available, loading...';
+            print ('Wisdom available, loading...');
             
             fp = open(fname);
             wisdom = pickle.load(fp);
             
             pyfftw.import_wisdom(wisdom);
 
-        print 'Shapes: ', self.inpArr.shape;
-        print 'Estimating optimal FFT, this may'
-        print 'take some time...';
+        print ('Shapes: ', self.inpArr.shape);
+        print ('Estimating optimal FFT, this may')
+        print ('take some time...');
 
 
         self.fwdTrans = pyfftw.FFTW(\
@@ -214,7 +214,7 @@ class specTrans2d(object):
 
 
 
-        print 'Done estimating!';
+        print ('Done estimating!');
 
         if not self.wisdomExists:
 
